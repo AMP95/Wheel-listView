@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="listViewControl.CustomListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:listViewControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:HeightConverter x:Key="cvr"/>
+    </UserControl.Resources>
+    <Grid>
+        <ListView
+                x:Name="ListView"
+                PreviewMouseWheel="ListView_PreviewMouseWheel"
+                SelectionChanged="ListView_SelectionChanged"
+                ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ItemsSource}"
+                SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=SelectedItem}">
+
+                    <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Style.Setters>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Border
+                                        x:Name="border"
+                                        BorderBrush="Black"
+                                        BorderThickness="1"
+                                        CornerRadius="10"
+                                        Height="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ItemHeight}"
+                                        Width="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ItemWidth}"
+                                        Margin="50 5 0 5">
+                                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                        </Trigger>
+                                        <EventTrigger RoutedEvent="Selected">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ThicknessAnimation 
+                                                        Storyboard.TargetName="border"
+                                                        Storyboard.TargetProperty="Margin"
+                                                        From="50 5 0 5"
+                                                        To="20 5 30 5"
+                                                        Duration="0:0:0.3"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="Unselected">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ThicknessAnimation 
+                                                        Storyboard.TargetName="border"
+                                                        Storyboard.TargetProperty="Margin"
+                                                        From="20 5 30 5"
+                                                        To="50 5 0 5"
+                                                        Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style.Setters>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+    </Grid>
+</UserControl>
